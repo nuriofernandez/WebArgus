@@ -2,7 +2,7 @@ package cron
 
 import (
 	"fmt"
-	"github.com/nuriofernandez/WebArgus/memory/storage"
+	"github.com/nuriofernandez/WebArgus/cron/period"
 	"time"
 )
 
@@ -10,7 +10,7 @@ func Start() {
 	fmt.Println("[Cron] Preparing orders checker...")
 
 	for {
-		orders := storage.GetAll()
+		orders := period.GetAllCheckeable()
 		if len(orders) == 0 {
 			fmt.Println("[Cron] There is no orders available")
 			return
@@ -22,10 +22,7 @@ func Start() {
 
 		fmt.Println("[Cron] Operation completed.")
 
-		time.Sleep(time.Second * 5)
-		fmt.Println("[Cron] Rechecking in 1 hour...")
-
-		// wait 1h
-		time.Sleep(time.Hour)
+		time.Sleep(time.Minute * 5)
+		fmt.Println("[Cron] Rechecking in 5 minutes...")
 	}
 }

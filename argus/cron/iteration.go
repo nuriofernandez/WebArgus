@@ -3,12 +3,16 @@ package cron
 import (
 	"fmt"
 	"github.com/nuriofernandez/WebArgus/checker"
+	"github.com/nuriofernandez/WebArgus/cron/period"
 	"github.com/nuriofernandez/WebArgus/notify"
 	"github.com/nuriofernandez/WebArgus/orders"
 )
 
 func Iterate(order orders.Order) {
 	fmt.Printf("[Cron] (%s) Checking...\n", order.Id)
+
+	// Remember this was checked now!
+	period.Set(order.Id)
 
 	isOnline := checker.IsOnline(order.Url)
 	if isOnline {
