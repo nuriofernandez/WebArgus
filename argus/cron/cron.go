@@ -22,7 +22,10 @@ func Start() {
 
 		fmt.Println("[Cron] Operation completed.")
 
-		time.Sleep(time.Minute * 5)
+		time.Sleep(time.Second * 5)
 		fmt.Println("[Cron] Rechecking in 5 minutes...")
+
+		// Wait 5 min to recheck
+		time.Sleep(time.Minute * 5)
 	}
 }
