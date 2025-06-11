@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webargus
+  namespace: webargus
+  labels:
+    app: webargus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webargus
+  template:
+    metadata:
+      labels:
+        app: webargus
+    spec:
+      containers:
+        - name: webargus
+          image: nginx:latest # Will be replaced by CI/CD
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "50Mi"
+              cpu: "50m"
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+          env:
+            - name: TEST_ORDER_PHONE
+              valueFrom:
+                secretKeyRef:
+                  name: webargus-secret
+                  key: TEST_ORDER_PHONE
+            - name: GLAUCUS_SMS_SERVICE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: webargus-secret
+                  key: GLAUCUS_SMS_SERVICE_TOKEN
+            - name: GLAUCUS_SMS_SERVICE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: webargus-secret
+                  key: GLAUCUS_SMS_SERVICE_URL
