@@ -15,5 +15,5 @@ func ShouldBeChecked(id string) bool {
 	}
 
 	// 1 hour after the recorded time is "after"(in the past) now?
-	return recorded.Add(time.Hour).After(time.Now())
+	return time.Now().After(recorded.Add(time.Hour))
 }
