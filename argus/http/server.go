@@ -28,7 +28,7 @@ func Start() {
 
 	// Prepare paths
 	apiRouter.HandleFunc("/orders", list.Controller)
-	apiRouter.HandleFunc("/oreders/add", add.Controller)
+	apiRouter.HandleFunc("/orders/add", add.Controller)
 
 	// Start http server
 	fmt.Println("[HTTP] Listening on :80")
