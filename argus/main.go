@@ -2,12 +2,11 @@ package main
 
 import (
 	_ "github.com/joho/godotenv/autoload" // Important to keep this as the first import!
+	"github.com/nuriofernandez/WebArgus/cron"
+	"github.com/nuriofernandez/WebArgus/http"
 	"os"
 
 	"fmt"
-	"github.com/nuriofernandez/WebArgus/checker"
-	"github.com/nuriofernandez/WebArgus/notify"
-	"github.com/nuriofernandez/WebArgus/orders"
 )
 
 func main() {
@@ -15,20 +14,9 @@ func main() {
 
 	fmt.Println("[TESTING MODE] Testing phone is: " + os.Getenv("TEST_ORDER_PHONE"))
 
-	fmt.Println("[Argus] Preparing orders checker...")
-	order, err := orders.NextOrder()
-	if err != nil {
-		fmt.Println("[Argus] There is no orders available")
-		return
-	}
+	fmt.Println("[Argus] Starting cron worker...")
+	go cron.Start()
 
-	isOnline := checker.IsOnline(order.Url)
-	if isOnline {
-		fmt.Println("[Argus] Order passed check!")
-
-		fmt.Println("[Argus] Preparing notification...")
-		notify.Notify(order)
-	}
-
-	fmt.Println("[Argus] Operation completed.")
+	fmt.Println("[Argus] Starting http server...")
+	http.Start()
 }
