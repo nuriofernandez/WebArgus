@@ -1,7 +1,7 @@
 ##############################
 # Build stage
 ##############################
-FROM golang:1.21-alpine as build
+FROM golang:1.23-alpine as build
 
 ### Copy only src files
 WORKDIR /app
