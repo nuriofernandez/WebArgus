@@ -18,7 +18,7 @@ func Controller(w http.ResponseWriter, r *http.Request) {
 }
 
 func convert(orders []orders.Order) []OrderResponse {
-	var result []OrderResponse
+	var result = make([]OrderResponse, 0)
 	for _, order := range orders {
 		result = append(result, OrderResponse{
 			Id:        order.Id,
