@@ -2,26 +2,30 @@ package cron
 
 import (
 	"fmt"
-	"github.com/nuriofernandez/WebArgus/checker"
-	"github.com/nuriofernandez/WebArgus/notify"
-	"github.com/nuriofernandez/WebArgus/orders"
+	"github.com/nuriofernandez/WebArgus/memory/storage"
+	"time"
 )
 
 func Start() {
 	fmt.Println("[Cron] Preparing orders checker...")
-	order, err := orders.NextOrder()
-	if err != nil {
-		fmt.Println("[Cron] There is no orders available")
-		return
+
+	for {
+		orders := storage.GetAll()
+		if len(orders) == 0 {
+			fmt.Println("[Cron] There is no orders available")
+			return
+		}
+
+		for _, order := range orders {
+			Iterate(order)
+		}
+
+		fmt.Println("[Cron] Operation completed.")
+
+		time.Sleep(time.Second * 5)
+		fmt.Println("[Cron] Rechecking in 1 hour...")
+
+		// wait 1h
+		time.Sleep(time.Hour)
 	}
-
-	isOnline := checker.IsOnline(order.Url)
-	if isOnline {
-		fmt.Println("[Cron] Order passed check!")
-
-		fmt.Println("[Cron] Preparing notification...")
-		notify.Notify(order)
-	}
-
-	fmt.Println("[Cron] Operation completed.")
 }
