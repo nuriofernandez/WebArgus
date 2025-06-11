@@ -1,22 +1,19 @@
 package notify
 
 import (
-	"github.com/nuriofernandez/WebArgus/memory"
+	"github.com/nuriofernandez/WebArgus/memory/archive"
+	"github.com/nuriofernandez/WebArgus/memory/storage"
 	"github.com/nuriofernandez/WebArgus/orders"
 )
 
 func Notify(order orders.Order) {
-	isChecked, err := memory.Check(order.Url)
+	// Archive it
+	archive.Put(order)
 
-	// In case is already sent, stop.
-	if err != nil || !isChecked {
-		return
-	}
+	// Delete it
+	storage.Delete(order.Id)
 
+	// Send notification
 	info := order.Notify
-	err = memory.Remember(order.Url)
-	if err != nil {
-		return
-	}
 	sendSms(info.Phone, info.Title, info.Message)
 }

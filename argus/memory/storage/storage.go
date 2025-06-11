@@ -24,3 +24,7 @@ func GetAll() []orders.Order {
 	}
 	return result
 }
+
+func Delete(id string) {
+	delete(storage, id)
+}
