@@ -1,6 +1,7 @@
 package orders
 
 type Order struct {
+	Id        string
 	Url       string
 	CheckType string
 	Notify    NotificationRule
