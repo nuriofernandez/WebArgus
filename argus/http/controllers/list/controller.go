@@ -2,22 +2,35 @@ package list
 
 import (
 	"encoding/json"
+	"github.com/nuriofernandez/WebArgus/memory/storage"
+	"github.com/nuriofernandez/WebArgus/orders"
 	"net/http"
-	"os"
 )
 
 func Controller(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(200)
-	json.NewEncoder(w).Encode(OrderResponse{
-		Id:        "ABC",
-		Url:       "https://itpec.org/statsandresults/all-passers-information/Philippines/2025S_FE.pdf",
-		CheckType: "Status:200",
-		Notify: NotificationRuleResponse{
-			Phone:   "+34" + os.Getenv("TEST_ORDER_PHONE"),
-			Title:   "ITPEC",
-			Message: "ITPEC exam results are now available!",
-		},
-		Period: "1h",
-	})
+
+	allOrders := storage.GetAll()
+	response := convert(allOrders)
+
+	json.NewEncoder(w).Encode(response)
+}
+
+func convert(orders []orders.Order) []OrderResponse {
+	var result []OrderResponse
+	for _, order := range orders {
+		result = append(result, OrderResponse{
+			Id:        order.Id,
+			Url:       order.Url,
+			CheckType: order.CheckType,
+			Notify: NotificationRuleResponse{
+				Phone:   order.Notify.Phone,
+				Title:   order.Notify.Title,
+				Message: order.Notify.Message,
+			},
+			Period: order.Period,
+		})
+	}
+	return result
 }
